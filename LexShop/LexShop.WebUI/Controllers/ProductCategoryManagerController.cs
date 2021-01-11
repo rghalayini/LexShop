@@ -6,7 +6,6 @@ using System.Web.Mvc;
 using LexShop.DataAccess.InMemory;
 using LexShop.Core.Models;
 
-
 namespace LexShop.WebUI.Controllers
 {
     public class ProductCategoryManagerController : Controller
@@ -16,11 +15,13 @@ namespace LexShop.WebUI.Controllers
         {
             context = new ProductCategoryRepository();
         }
+
         public ActionResult Index()
         {
             List<ProductCategory> productCategories = context.Collection().ToList();
             return View(productCategories);
         }
+
         public ActionResult Create()
         {
             ProductCategory productCategory = new ProductCategory();
@@ -39,8 +40,22 @@ namespace LexShop.WebUI.Controllers
                 context.Commit();
                 return RedirectToAction("Index");
             }
+
         }
         public ActionResult Edit(string Id)
+        {
+            ProductCategory productCategory = context.Find(Id);
+            if (productCategory == null)
+            {
+                return HttpNotFound();
+            }
+            else
+            {
+                return View(productCategory);
+            }
+        }
+        [HttpPost]
+        public ActionResult Edit(ProductCategory productCategory, string Id)
         {
             ProductCategory productCategoryToEdit = context.Find(Id);
             if (productCategoryToEdit == null)
@@ -49,24 +64,11 @@ namespace LexShop.WebUI.Controllers
             }
             else
             {
-                return View(productCategoryToEdit);
-            }
-        }
-        [HttpPost]
-        public ActionResult Edit(ProductCategory product, string Id)
-        {
-            ProductCategory productCategoryToEdit = context.Find(Id);
-            if (productCategoryToEdit ==null)
-            {
-                return HttpNotFound();
-            }
-            else
-            {
                 if (!ModelState.IsValid)
                 {
-                    return View(product);
+                    return View(productCategory);
                 }
-                productCategoryToEdit.Category = product.Category;
+                productCategoryToEdit.Category = productCategory.Category;
                 context.Commit();
                 return RedirectToAction("Index");
             }
@@ -74,7 +76,6 @@ namespace LexShop.WebUI.Controllers
         public ActionResult Delete(string Id)
         {
             ProductCategory productCategoryToDelete = context.Find(Id);
-
             if (productCategoryToDelete == null)
             {
                 return HttpNotFound();
