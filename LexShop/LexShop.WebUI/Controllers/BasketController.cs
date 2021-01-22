@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LexShop.Core.Contracts;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -8,19 +9,33 @@ namespace LexShop.WebUI.Controllers
 {
     public class BasketController : Controller
     {
-        IRepository<Product> context;
-        IRepository<ProductCategory> productCategories;
-        public BasketController()
+        IBasketService basketService;
+
+        public BasketController(IBasketService BasketService)
         {
-            context = productContext;
-            productCategories = productCategoryContext;
+            this.basketService = BasketService;
         }
 
-        // GET: Basket
+        // GET: BasketController2
         public ActionResult Index()
         {
-            List<Product> products = context.Collection().ToList();
-            return View(products);           
+            var model = basketService.GetBasketItems(this.HttpContext);
+            return View(model);
+        }
+        public ActionResult AddToBasket(string Id)
+        {
+            basketService.AddToBasket(this.HttpContext, Id);
+            return RedirectToAction("Index");
+        }
+        public ActionResult RemoveFromBasket(string Id)
+        {
+            basketService.RemoveFromBasket(this.HttpContext, Id);
+            return RedirectToAction("Index");
+        }
+        public PartialViewResult BasketSummary()
+        {
+            var basketSummary = basketService.GetBasketSummary(this.HttpContext);
+            return PartialView(basketSummary);
         }
     }
 }

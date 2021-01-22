@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using LexShop.Core;
 
 namespace LexShop.Services
 {
@@ -30,8 +31,8 @@ namespace LexShop.Services
             Basket basket = new Basket();
             if (cookie != null)
             {
-                String basketId = cookie.Value;
-                if(string.IsNullOrEmpty(basketId))
+                string basketId = cookie.Value;
+                if(!string.IsNullOrEmpty(basketId))
                 {
                     basket = basketContext.Find(basketId);
                 }

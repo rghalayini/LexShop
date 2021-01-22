@@ -16,13 +16,11 @@ namespace LexShop.WebUI.Controllers
         {
             this.context = context;
         }
-
         public ActionResult Index()
         {
             List<ProductCategory> productCategories = context.Collection().ToList();
             return View(productCategories);
         }
-
         public ActionResult Create()
         {
             ProductCategory productCategory = new ProductCategory();
