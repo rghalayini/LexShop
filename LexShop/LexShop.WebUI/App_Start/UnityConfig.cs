@@ -56,7 +56,8 @@ namespace LexShop.WebUI
             container.RegisterType<IRepository<BasketItem>, SQLRepository<BasketItem>>();
             container.RegisterType<IBasketService, BasketService>();
             container.RegisterType<IRepository<Customer>, SQLRepository<Customer>>();
-
+            container.RegisterType<IRepository<Order>, SQLRepository<Order>>();
+            container.RegisterType<IOrderService, OrderService>();
 
             //--------------------this is for In Memory---------------------
             //container.RegisterType<IRepository<Product>, InMemoryRepository<Product>>();
